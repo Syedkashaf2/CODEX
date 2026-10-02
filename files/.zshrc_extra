@@ -1,0 +1,20 @@
+# KANG shell enhancements
+# Add advanced utility aliases
+
+[ -f "$TOOLX_DIR/stats" ] && alias stats="$TOOLX_DIR/stats"
+[ -f "$TOOLX_DIR/themes" ] && alias themes="$TOOLX_DIR/themes"
+[ -f "$TOOLX_DIR/monitor" ] && alias monitor="$TOOLX_DIR/monitor"
+[ -f "$TOOLX_DIR/backup" ] && alias backup="$TOOLX_DIR/backup"
+[ -f "$TOOLX_DIR/config" ] && alias config="$TOOLX_DIR/config"
+[ -f "$TOOLX_DIR/gitx" ] && alias gitx="$TOOLX_DIR/gitx"
+[ -f "$TOOLX_DIR/profile" ] && alias profile="$TOOLX_DIR/profile"
+[ -f "$TOOLX_DIR/kanghelp" ] && alias kanghelp="$TOOLX_DIR/kanghelp"
+
+export KANG_MODE="advanced"
+export KANG_VERSION="2.1.0"
+export SHELL_NAME="KANG"
+
+if [ -f "$HOME/.kangkustom" ]; then
+  KANG_THEME=$(cat "$HOME/.kangkustom" 2>/dev/null || echo default)
+  export ZSH_THEME="$KANG_THEME"
+fi

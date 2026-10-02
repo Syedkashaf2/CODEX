@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# KANG Network/Process Monitor
+set -u
+
+r='\033[1;91m'; p='\033[1;95m'; y='\033[1;93m'; g='\033[1;92m'; n='\033[0m'; b='\033[1;94m'; c='\033[1;96m'
+
+show_monitor() {
+  clear
+  echo -e "${b}╔════════════════════════════════════════════╗${n}"
+  echo -e "${b}║${g}            KANG MONITOR                 ${b}║${n}"
+  echo -e "${b}╚════════════════════════════════════════════╝${n}"
+  echo
+  echo -e "${c}Date:${g} $(date '+%Y-%m-%d %H:%M:%S')"
+  echo -e "${c}Users online:${g} $(who | wc -l)"
+  echo -e "${c}Processes:${g} $(ps -eo pid= --no-headers | wc -l)"
+  echo -e "${c}Disk Usage:${g} $(df "$HOME" 2>/dev/null | awk 'NR==2 {print $5}')"
+  echo -e "${c}Memory:${g} $(free -m 2>/dev/null | awk '/^Mem:/ {printf "%s MB used / %s MB total", $3, $2}')"
+  echo -e "${c}Top apps:${g}"
+  ps -eo pid,comm,%cpu,%mem --sort=-%cpu --no-headers 2>/dev/null | head -n 5
+  echo
+}
+
+while true; do
+  show_monitor
+  sleep 3
+done

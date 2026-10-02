@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# KANG Backup Manager
+set -u
+
+BACKUP_DIR="$HOME/.kang_backups"
+mkdir -p "$BACKUP_DIR"
+
+cmd="${1:-}"
+name="${2:-}"
+
+case "$cmd" in
+  create)
+    if [ -z "$name" ]; then
+      echo "Usage: backup create <name>"
+      exit 1
+    fi
+    mkdir -p "$BACKUP_DIR/$name"
+    cp -a "$HOME/.zshrc" "$BACKUP_DIR/$name/.zshrc" 2>/dev/null || true
+    cp -a "$HOME/.oh-my-zsh" "$BACKUP_DIR/$name/.oh-my-zsh" 2>/dev/null || true
+    echo -e "\n${g}[+] Backup created: ${y}$name${n}\n"
+    ;;
+  list)
+    ls -1 "$BACKUP_DIR" 2>/dev/null || echo "No backups found."
+    ;;
+  restore)
+    if [ -z "$name" ]; then
+      echo "Usage: backup restore <name>"
+      exit 1
+    fi
+    if [ -f "$BACKUP_DIR/$name/.zshrc" ]; then
+      cp -a "$BACKUP_DIR/$name/.zshrc" "$HOME/.zshrc"
+      echo -e "\n${g}[+] Restored backup: ${y}$name${n}\n"
+    else
+      echo "Backup not found."
+    fi
+    ;;
+  *)
+    echo "KANG Backup Manager"
+    echo "Usage: backup create <name> | backup list | backup restore <name>"
+    ;;
+esac

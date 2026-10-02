@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# KANG Config Manager
+set -u
+
+CONFIG_FILE="$HOME/.zshrc"
+
+case "${1:-view}" in
+  view)
+    if [ -f "$CONFIG_FILE" ]; then
+      sed -n '1,220p' "$CONFIG_FILE"
+    else
+      echo "No config file found."
+    fi
+    ;;
+  edit)
+    if command -v nano >/dev/null 2>&1; then
+      nano "$CONFIG_FILE"
+    elif command -v vi >/dev/null 2>&1; then
+      vi "$CONFIG_FILE"
+    else
+      echo "No editor available."
+    fi
+    ;;
+  reset)
+    echo "Resetting KANG config is not recommended in this version."
+    echo "Use your .zshrc backup or custom setup."
+    ;;
+  *)
+    echo "Usage: config [view|edit|reset]"
+    ;;
+esac

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# KANG Themes Manager
+set -u
+
+THEME_DIR="$HOME/.oh-my-zsh/themes"
+CUSTOM_FILE="$HOME/.kangkustom"
+
+if [ ! -d "$THEME_DIR" ]; then
+  mkdir -p "$THEME_DIR"
+fi
+
+list_themes() {
+  echo -e "\n${c}KANG Themes\n${n}"
+  echo "1) matrix"
+  echo "2) neon"
+  echo "3) sunset"
+  echo "4) terminal"
+  echo "5) cyber"
+  echo "6) default"
+}
+
+apply_theme() {
+  local theme="$1"
+  case "$theme" in
+    matrix)
+      export ZSH_THEME="matrix" ;;
+    neon)
+      export ZSH_THEME="neon" ;;
+    sunset)
+      export ZSH_THEME="sunset" ;;
+    terminal)
+      export ZSH_THEME="terminal" ;;
+    cyber)
+      export ZSH_THEME="cyber" ;;
+    default)
+      export ZSH_THEME="robbyrussell" ;;
+    *)
+      echo "Unknown theme: $theme"
+      return 1
+      ;;
+  esac
+
+  echo "$theme" > "$CUSTOM_FILE"
+  echo -e "\n${g}[+] Theme set to: ${y}$theme${n}\n"
+}
+
+if [ "${1:-}" = "-l" ] || [ "${1:-}" = "--list" ]; then
+  list_themes
+  exit 0
+fi
+
+if [ -n "${1:-}" ]; then
+  apply_theme "$1"
+  exit 0
+fi
+
+list_themes
+printf "\nChoose a theme: "
+read -r choice
+apply_theme "${choice:-default}"

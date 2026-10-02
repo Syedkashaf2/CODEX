@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# KANG Advanced Help
+set -u
+
+r='\033[1;91m'; p='\033[1;95m'; y='\033[1;93m'; g='\033[1;92m'; n='\033[0m'; b='\033[1;94m'; c='\033[1;96m'
+
+clear
+printf "\n${b}╔════════════════════════════════════════════╗${n}\n"
+printf "${b}║${g}           KANG COMMAND HUB             ${b}║${n}\n"
+printf "${b}╚════════════════════════════════════════════╝${n}\n\n"
+printf "${c}help       ${g}Show KANG help\n"
+printf "${c}stats      ${g}System intelligence dashboard\n"
+printf "${c}themes     ${g}Theme manager\n"
+printf "${c}monitor    ${g}Live monitor\n"
+printf "${c}backup     ${g}Backup manager\n"
+printf "${c}config     ${g}Configuration manager\n"
+printf "${c}gitx       ${g}Git assistant\n"
+printf "${c}bname      ${g}Change banner name\n"
+printf "${c}unstall    ${g}Restore default shell\n"
+printf "${c}chat       ${g}Open coder chat\n"
+printf "${c}update     ${g}Refresh terminal UI\n"
+printf "\n${y}KANG Toolkit is optimized for advanced Termux/Linux terminal work.${n}\n"

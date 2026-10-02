@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+# KANG Stats Dashboard
+set -u
+
+r='\033[1;91m'; p='\033[1;95m'; y='\033[1;93m'; g='\033[1;92m'; n='\033[0m'; b='\033[1;94m'; c='\033[1;96m'
+
+get_disk() {
+  df -h "$HOME" 2>/dev/null | awk 'NR==2 {print $2, $3, $5}'
+}
+
+disk_usage() {
+  local out
+  out=$(df "$HOME" 2>/dev/null | awk 'NR==2 {print $5}' | tr -d '%')
+  echo "${out:-0}"
+}
+
+mem_used() {
+  if command -v free >/dev/null 2>&1; then
+    free -m 2>/dev/null | awk '/^Mem:/ {printf "%s/%s MB", $3, $2}'
+  else
+    echo "unknown"
+  fi
+}
+
+cpu_temp() {
+  if [ -f /sys/class/thermal/thermal_zone0/temp ]; then
+    echo "$(( $(cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo 0) / 1000 ))°C"
+  elif command -v vcgencmd >/dev/null 2>&1; then
+    vcgencmd measure_temp 2>/dev/null | cut -d= -f2 | tr -d "'C"
+  else
+    echo "n/a"
+  fi
+}
+
+uptime_info() {
+  uptime 2>/dev/null | sed 's/^up //'
+}
+
+show_stats() {
+  clear
+  echo
+  echo -e "${b}╔════════════════════════════════════════════╗${n}"
+  echo -e "${b}║${g}           KANG SYSTEM STATS             ${b}║${n}"
+  echo -e "${b}╚════════════════════════════════════════════╝${n}"
+  echo
+  echo -e "${c}User:${g} $(whoami)"
+  echo -e "${c}Host:${g} $(hostname 2>/dev/null || uname -n)"
+  echo -e "${c}OS:${g} $(uname -s)"
+  echo -e "${c}Kernel:${g} $(uname -r)"
+  echo -e "${c}Uptime:${g} $(uptime_info)"
+  echo -e "${c}RAM Used:${g} $(mem_used)"
+  echo -e "${c}CPU Temp:${g} $(cpu_temp)"
+  echo -e "${c}Disk:${g} $(get_disk)"
+  echo -e "${c}Disk Usage:${g} $(disk_usage)%"
+  echo
+  echo -e "${b}╔════════════════════════════════════════════╗${n}"
+  echo -e "${b}║${g}  KANG Terminal Toolkit - Advanced Mode   ${b}║${n}"
+  echo -e "${b}╚════════════════════════════════════════════╝${n}"
+  echo
+}
+
+case "${1:-}" in
+  --live|-l)
+    while true; do
+      clear
+      show_stats
+      sleep 2
+    done
+    ;;
+  *)
+    show_stats
+    ;;
+esac

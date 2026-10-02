@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# KANG Git Assistant
+set -u
+
+cmd="${1:-status}"
+shift || true
+
+case "$cmd" in
+  status)
+    git status --short --branch
+    ;;
+  commit)
+    msg="${*:-KANG update}"
+    git add .
+    git commit -m "$msg"
+    ;;
+  log)
+    git log --oneline -n 5
+    ;;
+  clone)
+    repo="${1:-}"
+    if [ -z "$repo" ]; then
+      echo "Usage: gitx clone <repo-url>"
+      exit 1
+    fi
+    git clone "$repo"
+    ;;
+  *)
+    echo "KANG GitX Helper"
+    echo "Usage: gitx [status|commit|log|clone]"
+    ;;
+esac

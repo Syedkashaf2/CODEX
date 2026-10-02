@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# KANG profile manager
+set -u
+
+PROFILE_FILE="$HOME/.kang_profile"
+
+if [ ! -f "$PROFILE_FILE" ]; then
+  echo "KANG" > "$PROFILE_FILE"
+fi
+
+case "${1:-show}" in
+  show)
+    echo "Profile: $(cat "$PROFILE_FILE")"
+    ;;
+  set)
+    new_name="${2:-KANG}"
+    echo "$new_name" > "$PROFILE_FILE"
+    echo "Profile updated to: $new_name"
+    ;;
+  *)
+    echo "Usage: profile [show|set <name>]"
+    ;;
+esac
